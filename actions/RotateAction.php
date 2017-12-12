@@ -43,6 +43,7 @@ class RotateAction extends Action
         try {
             if (Yii::$app->request->isPost) {
                 $data = Yii::$app->request->post();
+                var_dump($data); die;
                 if (empty($data['url']) || !in_array($data['direction'], ['CW', 'CCW'])) {
                     throw new InvalidParamException('Invalid rotate options!');
                 }

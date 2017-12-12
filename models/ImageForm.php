@@ -40,12 +40,17 @@ class ImageForm extends Model
     public $url;
     
     /**
+     * @var string Server accessible root to the uploaded image
+     */
+    public $path;
+
+    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            ['image', 'image', 'extensions' => ['png', 'jpg', 'gif'], 'maxWidth' => 1000, 'maxHeight' => 1000, 'maxSize' => 2 * 1024 * 1024]
+            ['image', 'image', 'extensions' => ['png', 'jpg', 'gif'], 'maxWidth' => 1920, 'maxHeight' => 1280, 'maxSize' => 10 * 1024 * 1024]
         ];
     }
     
@@ -58,14 +63,25 @@ class ImageForm extends Model
     {
         try {
             if ($this->validate()) {
-                $save_path = FileHelper::normalizePath(Yii::getAlias('@app/web/' . self::UPLOAD_DIR));
+                $save_path = Yii::getAlias('@app') . '/../dev.brandmaker.ru' . '/' . 'statics' . '/' . self::UPLOAD_DIR;
+
                 FileHelper::createDirectory($save_path);
-                $this->url = Yii::getAlias('@web/' . self::UPLOAD_DIR . '/' . $this->image->baseName . '.' . $this->image->extension);
-                return $this->image->saveAs(FileHelper::normalizePath($save_path . '/' . $this->image->baseName . '.' . $this->image->extension));
+
+                $newName = self::hashName($this->image->baseName);
+
+                $this->path = $save_path . '/' . $newName . '.' . $this->image->extension;
+                $this->url  = Yii::getAlias('/statics/' . self::UPLOAD_DIR . '/' . $newName . '.' . $this->image->extension);
+            
+                return $this->image->saveAs($this->path);
             }
         } catch (Exception $e) {
             Yii::error($e->getMessage());
         }
         return false;
+    }
+
+    protected function hashName($name)
+    {
+        return md5($name);
     }
 }

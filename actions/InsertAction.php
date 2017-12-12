@@ -51,7 +51,9 @@ class InsertAction extends Action
                 if (empty($data['url'])) {
                     throw new InvalidParamException('Invalid insert options!');
                 }
-                $url = trim($data['url']);
+                $url  = trim($data['url']);
+                $path = Yii::getAlias('@app') . '/../dev.brandmaker.ru' . $url;
+                
                 if (substr($url, 0, 1) == '/') {
                     $url = substr($url, 1);
                 }
@@ -71,20 +73,25 @@ class InsertAction extends Action
                         }
                     }
                 }
-                if (!empty($crop)) {
-                    list($width, $height) = getimagesize($url);
-                    Image::crop(
-                            $url, 
-                            floor($width * trim($crop[3]) - $width * trim($crop[1])), 
-                            floor($height * trim($crop[2]) - $height * trim($crop[0])), 
-                            [
-                                floor($width * trim($crop[1])), 
-                                floor($height * trim($crop[0]))
-                            ]
-                        )->save($url);
-                }                 
+                
+                // if (!empty($crop)) {
+                //     list($width, $height) = getimagesize($path);
+                //     // var_dump(list($width, $height) = getimagesize($path)); die;
+                //     Image::crop(
+                //             $path, 
+                //             floor($width * trim($crop[3]) - $width * trim($crop[1])), 
+                //             floor($height * trim($crop[2]) - $height * trim($crop[0])), 
+                //             [
+                //                 floor($width * trim($crop[1])), 
+                //                 floor($height * trim($crop[0]))
+                //             ]
+                //         )->save($path);
 
-                list($width, $height) = getimagesize($url);
+                //         echo 'sdf';die;
+                // }              
+                
+
+                list($width, $height) = getimagesize($path);
 
                 return Json::encode([
                     'size' => [$width, $height],

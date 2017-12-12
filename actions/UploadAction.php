@@ -39,7 +39,7 @@ class UploadAction extends Action
             $model->image = UploadedFile::getInstanceByName('image');
             if ($model->validate()) {
                 if ($model->upload()) {
-                    list($width, $height) = getimagesize($model->url);
+                    list($width, $height) = getimagesize($model->path);
                     return Json::encode([
                         'size' => [$width, $height],
                         'url'  => $model->url
