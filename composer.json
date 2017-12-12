@@ -1,5 +1,5 @@
 {
-    "name": "bizley-fork/contenttools",
+    "name": "bizley/contenttools",
     "type": "yii2-extension",
     "description": "ContentTools editor implementation for Yii 2.",
     "keywords": ["contenttools", "yii2", "extension", "widget", "editor", "wysiwyg", "html"],
