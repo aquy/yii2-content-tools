@@ -63,14 +63,26 @@ class ImageForm extends Model
     {
         try {
             if ($this->validate()) {
+
+                $save_year  = date('Y');
+                $save_month = date('m');
+
                 $save_path = Yii::getAlias('@app') . '/../dev.brandmaker.ru' . '/' . 'statics' . '/' . self::UPLOAD_DIR;
 
                 FileHelper::createDirectory($save_path);
 
+                if (!is_dir($save_path . DIRECTORY_SEPARATOR . $save_year)) {
+                    mkdir($save_path . DIRECTORY_SEPARATOR . $save_year, 0755, true);
+                }
+
+                if (!is_dir($save_path . DIRECTORY_SEPARATOR . $save_year . DIRECTORY_SEPARATOR . $save_month)) {
+                    mkdir($save_path . DIRECTORY_SEPARATOR . $save_year . DIRECTORY_SEPARATOR . $save_month, 0755, true);   
+                }
+
                 $newName = self::hashName($this->image->baseName);
 
-                $this->path = $save_path . '/' . $newName . '.' . $this->image->extension;
-                $this->url  = Yii::getAlias('/statics/' . self::UPLOAD_DIR . '/' . $newName . '.' . $this->image->extension);
+                $this->path = $save_path . DIRECTORY_SEPARATOR . $save_year . DIRECTORY_SEPARATOR . $save_month . DIRECTORY_SEPARATOR . $newName . '.' . $this->image->extension;
+                $this->url  = urldecode(Yii::getAlias('/statics/' . self::UPLOAD_DIR . '/' . $save_year . '/' . $save_month . '/' . $newName . '.' . $this->image->extension));
             
                 return $this->image->saveAs($this->path);
             }
