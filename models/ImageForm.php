@@ -50,7 +50,7 @@ class ImageForm extends Model
     public function rules()
     {
         return [
-            ['image', 'image', 'extensions' => ['png', 'jpg', 'gif'], 'maxWidth' => 1920, 'maxHeight' => 1280, 'maxSize' => 10 * 1024 * 1024]
+            ['image', 'image', 'extensions' => ['png', 'jpg','JPG', 'JPEG', 'jpeg', 'PNG', 'gif'], 'maxWidth' => 1920, 'maxHeight' => 1280, 'maxSize' => 10 * 1024 * 1024]
         ];
     }
     
