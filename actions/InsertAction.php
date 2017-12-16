@@ -74,21 +74,26 @@ class InsertAction extends Action
                     }
                 }
                 
-                // if (!empty($crop)) {
-                //     list($width, $height) = getimagesize($path);
-                //     // var_dump(list($width, $height) = getimagesize($path)); die;
-                //     Image::crop(
-                //             $path, 
-                //             floor($width * trim($crop[3]) - $width * trim($crop[1])), 
-                //             floor($height * trim($crop[2]) - $height * trim($crop[0])), 
-                //             [
-                //                 floor($width * trim($crop[1])), 
-                //                 floor($height * trim($crop[0]))
-                //             ]
-                //         )->save($path);
+                if (!empty($crop)) {
+                    list($width, $height) = getimagesize($path);
+                    
+                    $pointX    = floor($width  * trim($crop[1])); // New box X start
+                    $pointY    = floor($height * trim($crop[0])); // New box Y start
+                    // New image Width
+                    $newWidth  = floor($width  * trim($crop[3]) - $width  * trim($crop[1]));
+                    // New image Height
+                    $newHeight = floor($height * trim($crop[2]) - $height * trim($crop[0]));
 
-                //         echo 'sdf';die;
-                // }              
+                    // Create new Imagin obj
+                    $imagine = new \Imagine\Gd\Imagine();
+                    // Create new Image Obj
+                    $image   = $imagine->open($path);
+
+                    // Do actions
+                    $image
+                        ->crop(new Point($pointX, $pointY), new Box($newWidth, $newHeight))
+                        ->save($path);
+                }              
                 
 
                 list($width, $height) = getimagesize($path);
