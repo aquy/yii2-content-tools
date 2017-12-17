@@ -52,7 +52,6 @@ class InsertAction extends Action
                     throw new InvalidParamException('Invalid insert options!');
                 }
                 $url  = trim($data['url']);
-                $path = Yii::getAlias('@app') . '/../dev.brandmaker.ru' . $url;
                 
                 if (substr($url, 0, 1) == '/') {
                     $url = substr($url, 1);
@@ -60,7 +59,9 @@ class InsertAction extends Action
                 if (strpos($url, '?_ignore=') !== false) {
                     $url = substr($url, 0, strpos($url, '?_ignore='));
                 }
-                
+
+                $path = Yii::getAlias('@webroot') . '/../' . $url;
+
                 $crop = [];
                 if (!empty($data['crop'])) {
                     $crop = explode(',', $data['crop']);
@@ -93,9 +94,8 @@ class InsertAction extends Action
                     $image
                         ->crop(new Point($pointX, $pointY), new Box($newWidth, $newHeight))
                         ->save($path);
-                }              
+                }
                 
-
                 list($width, $height) = getimagesize($path);
 
                 return Json::encode([

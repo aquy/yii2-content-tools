@@ -43,7 +43,6 @@ class RotateAction extends Action
         try {
             if (Yii::$app->request->isPost) {
                 $data = Yii::$app->request->post();
-                var_dump($data); die;
                 if (empty($data['url']) || !in_array($data['direction'], ['CW', 'CCW'])) {
                     throw new InvalidParamException('Invalid rotate options!');
                 }
@@ -55,10 +54,20 @@ class RotateAction extends Action
                 if (strpos($url, '?_ignore=') !== false) {
                     $url = substr($url, 0, strpos($url, '?_ignore='));
                 }
-                
-                Image::getImagine()->open($url)->copy()->rotate($data['direction'] == 'CW' ? 90 : -90)->save($url);
-                
-                list($width, $height) = getimagesize($url);
+
+                $imagePath = Yii::getAlias('@webroot') . '/../' . $url;
+
+                // Rotate direction
+                $direction = $data['direction'] == 'CW' ? 90 : -90;
+
+                // Create new Imagin obj
+                $imagine = new \Imagine\Gd\Imagine();
+                // Create new Image Obj
+                $image   = $imagine->open($imagePath);
+
+                $image->rotate($direction)->save($imagePath);
+                    
+                list($width, $height) = getimagesize($imagePath);
                 
                 return Json::encode([
                     'size' => [$width, $height],
