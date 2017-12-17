@@ -67,7 +67,7 @@ class ImageForm extends Model
                 $save_year  = date('Y');
                 $save_month = date('m');
 
-                $save_path = Yii::getAlias('@app') . '/../dev.brandmaker.ru' . '/' . 'statics' . '/' . self::UPLOAD_DIR;
+                $save_path = Yii::getAlias('@webroot') . '/../' . 'statics' . DIRECTORY_SEPARATOR . self::UPLOAD_DIR;
 
                 FileHelper::createDirectory($save_path);
 
