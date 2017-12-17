@@ -8,6 +8,8 @@ use yii\base\Action;
 use yii\base\InvalidParamException;
 use yii\helpers\Json;
 use yii\imagine\Image;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 
 /**
  * @author Paweł Bizley Brzozowski
